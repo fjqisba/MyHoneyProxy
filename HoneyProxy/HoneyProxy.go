@@ -112,7 +112,7 @@ func (this *HoneyProxy)handleConn(conn net.Conn)error  {
 	case 'G':	//get
 		ctx.Protocol = protocol_http
 		return this.handleHttpRequest(&bufConn,ctx)
-	case 'C':	//connectx
+	case 'C':	//connect
 		ctx.Protocol = protocol_https
 		tlsConfig,err := this.https_prepareRequest(&bufConn,ctx)
 		if err != nil {

@@ -4,7 +4,6 @@ import (
 	"MyHoneyProxy/HoneyProxy"
 	"bytes"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -24,8 +23,8 @@ func HandleResponse(resp *http.Response, ctx *HoneyProxy.ProxyCtx) *http.Respons
 	httpMiddle := ctx.UserData.(*HttpMiddle)
 	httpMiddle.ResponseBody = copyResponse(resp)
 	if len(httpMiddle.RequestBody) != 0{
-		log.Println("请求:",string(httpMiddle.RequestBody))
+		//log.Println("请求:",string(httpMiddle.RequestBody))
 	}
-	log.Println("响应:",string(httpMiddle.ResponseBody))
+	//log.Println("响应:",string(httpMiddle.ResponseBody))
 	return resp
 }

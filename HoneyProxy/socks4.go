@@ -58,7 +58,7 @@ func (this *HoneyProxy)handleSocks4Request(bufConn *bufferedConn,ctx *ProxyCtx)e
 	}
 
 	//TLS ClientHello magic
-	if peekHeader[0] == 0x16 && peekHeader[1] == 0x3 && peekHeader[2] <= 3{
+	if peekHeader[0] == 0x16 && peekHeader[1] == 0x3 && peekHeader[2] <= 0x3{
 		tlsConfig, err := TLSConfigFromCA(hostName,ctx)
 		if err != nil{
 			return err

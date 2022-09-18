@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"net"
+	"strconv"
 )
 
 // AddrSpec is used to return the target AddrSpec
@@ -20,6 +21,13 @@ type Socks5Request struct {
 	Version uint8
 	Command uint8
 	DestAddr *AddrSpec
+}
+
+func (this *AddrSpec)realAddr()string  {
+	if this.FQDN != ""{
+		return net.JoinHostPort(this.FQDN,strconv.Itoa(this.Port))
+	}
+	return net.JoinHostPort(this.IP.String(),strconv.Itoa(this.Port))
 }
 
 func readAddrSpec(r io.Reader) (*AddrSpec, error) {
@@ -217,8 +225,8 @@ func (this *HoneyProxy)handleSocks5Cmd_Connect(bufConn *bufferedConn,socksReq *S
 	}
 
 	//TLS ClientHello magic
-	if peekHeader[0] == 0x16 && peekHeader[1] == 0x3 && peekHeader[2] <= 3{
-		tlsConfig, err := TLSConfigFromCA(socksReq.DestAddr.FQDN,ctx)
+	if peekHeader[0] == 0x16 && peekHeader[1] == 0x3 && peekHeader[2] <= 0x3{
+		tlsConfig, err := TLSConfigFromCA(socksReq.DestAddr.realAddr(),ctx)
 		if err != nil{
 			return err
 		}
